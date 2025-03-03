@@ -62,7 +62,7 @@ export default function HomePage() {
       {error && <p className="mt-4 text-red-500">{error}</p>}
 
       {userData && (
-        <div className="mt-6 p-6 bg-gray-800 rounded-lg w-full max-w-3xl">
+        <div className="mt-6 p-6 bg-gray-800 rounded-lg w-full max-w-4xl">
           <div className="flex flex-col md:flex-row md:items-start gap-6">
             <div className="flex flex-col items-center md:w-1/3">
               <img src={userData.avatar_url} alt="Avatar" className="w-24 h-24 rounded-full mx-auto" />
@@ -70,11 +70,12 @@ export default function HomePage() {
               <p className="text-center mt-1">{userData.bio || "No bio available"}</p>
               <p className="text-center mt-1">Followers: {userData.followers} | Following: {userData.following}</p>
               <p className="text-center mt-1">Public Repos: {userData.public_repos}</p>
+              <p className="text-center mt-1">Member since: {new Date(userData.created_at).toLocaleDateString()}</p>
               <a
                 href={userData.html_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block text-center mt-4 text-blue-400 underline"
+                className="block text-center mt-4 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
               >
                 View GitHub Profile
               </a>
