@@ -2,111 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { auth, signInWithGoogle, signInWithGithub, loginWithEmail } from "@/app/lib/firebase";
-
-export default function LoginPage() {
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  const handleEmailLogin = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setLoading(true);
-    setError("");
-
-    const formData = new FormData(event.currentTarget);
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-
-    try {
-      await loginWithEmail(email, password);
-      router.push("/dashboard"); // Redirect after successful login
-    } catch (error: any) {
-      import("@/app/lib/errorHandler").then(({ handleFirebaseError }) => {
-        setError(handleFirebaseError(error));
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleProviderLogin = async (provider: "google" | "github") => {
-    setLoading(true);
-    setError("");
-
-    try {
-      provider === "google" ? await signInWithGoogle() : await signInWithGithub();
-      router.push("/dashboard"); // Redirect after login
-    } catch (error: any) {
-      import("@/app/lib/errorHandler").then(({ handleFirebaseError }) => {
-        setError(handleFirebaseError(error));
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
-      <div className="bg-white shadow-lg rounded-lg p-6 max-w-sm w-full">
-        <h1 className="text-2xl font-bold text-center mb-4">Login to GitHunts</h1>
-
-        {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
-
-        <button
-          onClick={() => handleProviderLogin("github")}
-          className="flex items-center justify-center w-full bg-gray-800 text-white px-4 py-2 rounded-md mb-2 hover:bg-gray-700 transition"
-          disabled={loading}
-        >
-          {loading ? "Loading..." : "Login with GitHub"}
-        </button>
-
-        <button
-          onClick={() => handleProviderLogin("google")}
-          className="flex items-center justify-center w-full bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition"
-          disabled={loading}
-        >
-          {loading ? "Loading..." : "Login with Google"}
-        </button>
-
-        <div className="flex items-center my-4">
-          <div className="border-b w-full"></div>
-          <span className="px-2 text-gray-500 text-sm">OR</span>
-          <div className="border-b w-full"></div>
-        </div>
-
-        <form onSubmit={handleEmailLogin} className="flex flex-col">
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            className="border p-2 rounded-md mb-2"
-            required
-          />
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            className="border p-2 rounded-md mb-2"
-            required
-          />
-          <button
-            type="submit"
-            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition"
-            disabled={loading}
-          >
-            {loading ? "Logging in..." : "Login with Email"}
-          </button>
-        </form>
-      </div>
-    </div>
-  );
-}
-"use client";
-
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { signInWithPopup, GithubAuthProvider, GoogleAuthProvider } from "firebase/auth";
+import { signInWithPopup, GithubAuthProvider, GoogleAuthProvider, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/app/lib/firebase";
 import { signIn } from "next-auth/react";
 
@@ -125,7 +21,7 @@ export default function LoginPage() {
     } catch (err: any) {
       console.log("GitHub sign-in error", err);
       setError("Failed to sign in with GitHub. Please try again.");
-      
+
       // If Firebase fails, try NextAuth
       try {
         await signIn("github", { callbackUrl: "/" });
@@ -152,13 +48,33 @@ export default function LoginPage() {
     }
   };
 
+  const handleEmailLogin = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setLoading(true);
+    setError("");
+
+    const formData = new FormData(event.currentTarget);
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      router.push("/");
+    } catch (err: any) {
+      console.error("Email login error", err);
+      setError("Failed to sign in with email. Please check your credentials.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-900 text-white">
       <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md">
         <h1 className="text-2xl font-bold mb-6 text-center">Login to GitHunts</h1>
-        
+
         {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
-        
+
         <div className="space-y-4">
           <button
             onClick={handleGithubLogin}
@@ -176,7 +92,7 @@ export default function LoginPage() {
             </svg>
             {loading ? "Signing in..." : "Sign in with GitHub"}
           </button>
-          
+
           <button
             onClick={handleGoogleLogin}
             disabled={loading}
@@ -189,15 +105,41 @@ export default function LoginPage() {
               viewBox="0 0 24 24"
               fill="white"
             >
-              <path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z" />
+              <path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"/>
             </svg>
             {loading ? "Signing in..." : "Sign in with Google"}
           </button>
+
+          <div className="flex items-center my-4">
+            <div className="border-b border-gray-700 w-full"></div>
+            <span className="px-2 text-gray-500 text-sm">OR</span>
+            <div className="border-b border-gray-700 w-full"></div>
+          </div>
+
+          <form onSubmit={handleEmailLogin} className="flex flex-col space-y-3">
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              className="px-4 py-2 bg-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              className="px-4 py-2 bg-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
+            <button
+              type="submit"
+              className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-md transition"
+              disabled={loading}
+            >
+              {loading ? "Logging in..." : "Login with Email"}
+            </button>
+          </form>
         </div>
-        
-        <p className="mt-6 text-center text-sm text-gray-400">
-          By signing in, you agree to our Terms of Service and Privacy Policy.
-        </p>
       </div>
     </div>
   );
