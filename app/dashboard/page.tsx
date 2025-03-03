@@ -1,7 +1,11 @@
 
 "use client";
 
-import { useSession } from "next-auth/react";
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { auth } from "@/app/lib/firebase";
 
 const Dashboard = () => {
   const { data: session, status } = useSession();
