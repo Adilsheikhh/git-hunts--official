@@ -4,7 +4,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "@/app/lib/firebase";
-import { useSession, SessionProvider } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { Session } from "next-auth";
 
 type AuthContextType = {
@@ -31,13 +31,21 @@ export default function AuthProvider({
   const { data: session } = useSession();
 
   useEffect(() => {
-    // Monitor Firebase auth state
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-      setLoading(false);
-    });
+    try {
+      // Monitor Firebase auth state
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        setUser(user);
+        setLoading(false);
+      }, (error) => {
+        console.error("Firebase auth error:", error);
+        setLoading(false);
+      });
 
-    return () => unsubscribe();
+      return () => unsubscribe();
+    } catch (error) {
+      console.error("Error setting up Firebase auth:", error);
+      setLoading(false);
+    }
   }, []);
 
   return (

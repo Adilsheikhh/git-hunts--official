@@ -4,7 +4,18 @@ import GithubProvider from "next-auth/providers/github";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
 
-const prisma = new PrismaClient();
+// Create a single PrismaClient instance for the entire app
+let prisma: PrismaClient;
+
+if (process.env.NODE_ENV === "production") {
+  prisma = new PrismaClient();
+} else {
+  // In development, use a global variable to prevent instantiating too many instances
+  if (!global.prisma) {
+    global.prisma = new PrismaClient();
+  }
+  prisma = global.prisma;
+}
 
 const handler = NextAuth({
   adapter: PrismaAdapter(prisma),
