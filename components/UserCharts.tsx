@@ -298,6 +298,14 @@ export default function UserCharts({ userData }: UserChartsProps) {
     maintainAspectRatio: false,
     animation: {
       duration: animationsEnabled ? 1000 : 0,
+      easing: 'easeInOutQuart',
+    },
+    transitions: {
+      active: {
+        animation: {
+          duration: animationsEnabled ? 400 : 0
+        }
+      }
     },
     plugins: {
       legend: {
@@ -331,21 +339,6 @@ export default function UserCharts({ userData }: UserChartsProps) {
           color: 'rgba(255, 255, 255, 0.1)', // Consistent grid color
         },
       },
-      r: {
-        ticks: {
-          color: 'white', // Consistent color for radial ticks
-        },
-        grid: {
-          color: 'rgba(255, 255, 255, 0.1)', // Consistent grid color
-        },
-        pointLabels: {
-          display: true,
-          centerPointLabels: true,
-          font: {
-            size: 12
-          }
-        }
-      },
     },
   };
 
@@ -353,12 +346,22 @@ export default function UserCharts({ userData }: UserChartsProps) {
     ...baseOptions,
     scales: {
       r: {
+        angleLines: {
+          display: true,
+          color: 'rgba(255, 255, 255, 0.1)'
+        },
+        grid: {
+          color: 'rgba(255, 255, 255, 0.1)'
+        },
         pointLabels: {
           display: true,
-          centerPointLabels: true,
           font: {
             size: 12
           }
+        },
+        ticks: {
+          color: 'white',
+          backdropColor: 'transparent'
         }
       }
     }
@@ -468,7 +471,17 @@ export default function UserCharts({ userData }: UserChartsProps) {
             </h3>
             <Doughnut 
               data={activityOverviewData} 
-              options={baseOptions} 
+              options={{
+                ...baseOptions,
+                cutout: '60%',
+                plugins: {
+                  ...baseOptions.plugins,
+                  legend: {
+                    ...baseOptions.plugins.legend,
+                    position: 'bottom'
+                  }
+                }
+              }} 
             />
           </div>
         )}
@@ -516,7 +529,23 @@ export default function UserCharts({ userData }: UserChartsProps) {
             </h3>
             <PolarArea 
               data={languageDistribution} 
-              options={baseOptions} 
+              options={{
+                ...baseOptions,
+                scales: {
+                  r: {
+                    ticks: {
+                      color: 'white',
+                      backdropColor: 'transparent'
+                    },
+                    grid: {
+                      color: 'rgba(255, 255, 255, 0.1)'
+                    },
+                    angleLines: {
+                      color: 'rgba(255, 255, 255, 0.1)'
+                    }
+                  }
+                }
+              }} 
             />
           </div>
         )}
@@ -543,9 +572,13 @@ export default function UserCharts({ userData }: UserChartsProps) {
               options={{
                 ...baseOptions,
                 scales: {
-                  ...baseOptions.scales,
                   x: {
-                    ...baseOptions.scales.x,
+                    ticks: {
+                      color: 'white',
+                    },
+                    grid: {
+                      color: 'rgba(255, 255, 255, 0.1)',
+                    },
                     title: {
                       display: true,
                       text: 'Forks',
@@ -553,7 +586,13 @@ export default function UserCharts({ userData }: UserChartsProps) {
                     },
                   },
                   y: {
-                    ...baseOptions.scales.y,
+                    beginAtZero: true,
+                    ticks: {
+                      color: 'white',
+                    },
+                    grid: {
+                      color: 'rgba(255, 255, 255, 0.1)',
+                    },
                     title: {
                       display: true,
                       text: 'Stars',
@@ -592,8 +631,13 @@ export default function UserCharts({ userData }: UserChartsProps) {
               data={engagementRatioData} 
               options={{
                 ...baseOptions,
+                borderWidth: 2,
                 plugins: {
                   ...baseOptions.plugins,
+                  legend: {
+                    ...baseOptions.plugins.legend,
+                    position: 'bottom'
+                  },
                   tooltip: {
                     ...baseOptions.plugins.tooltip,
                     callbacks: {
