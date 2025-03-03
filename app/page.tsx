@@ -1,6 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
 
+import UserCharts from "@/components/UserCharts";
+
 export default function HomePage() {
   const [username, setUsername] = useState("");
   const [userData, setUserData] = useState(null);
@@ -60,20 +62,28 @@ export default function HomePage() {
       {error && <p className="mt-4 text-red-500">{error}</p>}
 
       {userData && (
-        <div className="mt-6 p-6 bg-gray-800 rounded-lg w-full max-w-md">
-          <img src={userData.avatar_url} alt="Avatar" className="w-24 h-24 rounded-full mx-auto" />
-          <h2 className="text-2xl text-center font-bold mt-2">{userData.login}</h2>
-          <p className="text-center mt-1">{userData.bio || "No bio available"}</p>
-          <p className="text-center mt-1">Followers: {userData.followers} | Following: {userData.following}</p>
-          <p className="text-center mt-1">Public Repos: {userData.public_repos}</p>
-          <a
-            href={userData.html_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block text-center mt-4 text-blue-400 underline"
-          >
-            View GitHub Profile
-          </a>
+        <div className="mt-6 p-6 bg-gray-800 rounded-lg w-full max-w-3xl">
+          <div className="flex flex-col md:flex-row md:items-start gap-6">
+            <div className="flex flex-col items-center md:w-1/3">
+              <img src={userData.avatar_url} alt="Avatar" className="w-24 h-24 rounded-full mx-auto" />
+              <h2 className="text-2xl text-center font-bold mt-2">{userData.login}</h2>
+              <p className="text-center mt-1">{userData.bio || "No bio available"}</p>
+              <p className="text-center mt-1">Followers: {userData.followers} | Following: {userData.following}</p>
+              <p className="text-center mt-1">Public Repos: {userData.public_repos}</p>
+              <a
+                href={userData.html_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block text-center mt-4 text-blue-400 underline"
+              >
+                View GitHub Profile
+              </a>
+            </div>
+            
+            <div className="md:w-2/3 w-full mt-4 md:mt-0">
+              <UserCharts userData={userData} />
+            </div>
+          </div>
         </div>
       )}
     </div>
