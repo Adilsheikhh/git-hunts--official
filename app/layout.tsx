@@ -2,7 +2,7 @@
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import AuthProvider from "@/app/context/AuthProvider";
-import { SessionProvider } from "next-auth/react";
+import ClientSessionProvider from "@/app/context/SessionProvider";
 
 export const metadata = {
   title: "GitHunts - Track Your Contributions",
@@ -16,12 +16,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <SessionProvider>
+        <ClientSessionProvider>
           <AuthProvider>
             <Navbar />
             {children}
           </AuthProvider>
-        </SessionProvider>
+        </ClientSessionProvider>
       </body>
     </html>
   );
