@@ -1,0 +1,16 @@
+[project]/node_modules/chart.js/dist/chart.js [app-client] (ecmascript) <locals>/generateTickLabels/this._pointLabels<@https://df6c3051-4e77-41ec-b3a7-3481396a10e7-00-30do2uix6h119.pike.replit.dev/_next/static/chunks/node_modules_17a62cc2._.js:14297:204
+generateTickLabels@https://df6c3051-4e77-41ec-b3a7-3481396a10e7-00-30do2uix6h119.pike.replit.dev/_next/static/chunks/node_modules_17a62cc2._.js:14296:46
+_convertTicksToLabels@https://df6c3051-4e77-41ec-b3a7-3481396a10e7-00-30do2uix6h119.pike.replit.dev/_next/static/chunks/node_modules_17a62cc2._.js:7721:14
+update@https://df6c3051-4e77-41ec-b3a7-3481396a10e7-00-30do2uix6h119.pike.replit.dev/_next/static/chunks/node_modules_17a62cc2._.js:7465:14
+[project]/node_modules/chart.js/dist/chart.js [app-client] (ecmascript) <locals>/update/<@https://df6c3051-4e77-41ec-b3a7-3481396a10e7-00-30do2uix6h119.pike.replit.dev/_next/static/chunks/node_modules_17a62cc2._.js:6741:17
+each@https://df6c3051-4e77-41ec-b3a7-3481396a10e7-00-30do2uix6h119.pike.replit.dev/_next/static/chunks/node_modules_17a62cc2._.js:882:20
+update@https://df6c3051-4e77-41ec-b3a7-3481396a10e7-00-30do2uix6h119.pike.replit.dev/_next/static/chunks/node_modules_17a62cc2._.js:6738:185
+_updateLayout@https://df6c3051-4e77-41ec-b3a7-3481396a10e7-00-30do2uix6h119.pike.replit.dev/_next/static/chunks/node_modules_17a62cc2._.js:9541:17
+update@https://df6c3051-4e77-41ec-b3a7-3481396a10e7-00-30do2uix6h119.pike.replit.dev/_next/static/chunks/node_modules_17a62cc2._.js:9472:14
+Chart@https://df6c3051-4e77-41ec-b3a7-3481396a10e7-00-30do2uix6h119.pike.replit.dev/_next/static/chunks/node_modules_17a62cc2._.js:9232:18
+renderChart@https://df6c3051-4e77-41ec-b3a7-3481396a10e7-00-30do2uix6h119.pike.replit.dev/_next/static/chunks/node_modules_17a62cc2._.js:15114:28
+ChartComponent.useEffect@https://df6c3051-4e77-41ec-b3a7-3481396a10e7-00-30do2uix6h119.pike.replit.dev/_next/static/chunks/node_modules_17a62cc2._.js:15189:13
+[project]/node_modules/react-chartjs-2/dist/index.js [app-client] (ecmascript)/createTypedChart/<@https://df6c3051-4e77-41ec-b3a7-3481396a10e7-00-30do2uix6h119.pike.replit.dev/_next/static/chunks/node_modules_17a62cc2._.js:15206:400
+UserCharts@https://df6c3051-4e77-41ec-b3a7-3481396a10e7-00-30do2uix6h119.pike.replit.dev/_next/static/chunks/_f7062943._.js:632:231
+HomePage@https://df6c3051-4e77-41ec-b3a7-3481396a10e7-00-30do2uix6h119.pike.replit.dev/_next/static/chunks/_f7062943._.js:1105:241
+ClientPageRoot@https://df6c3051-4e77-41ec-b3a7-3481396a10e7-00-30do2uix6h119.pike.replit.dev/_next/static/chunks/node_modules_66b1b8a6._.js:19230:50
