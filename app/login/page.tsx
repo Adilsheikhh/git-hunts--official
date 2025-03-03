@@ -22,7 +22,9 @@ export default function LoginPage() {
       await loginWithEmail(email, password);
       router.push("/dashboard"); // Redirect after successful login
     } catch (error: any) {
-      setError(error.message);
+      import("@/app/lib/errorHandler").then(({ handleFirebaseError }) => {
+        setError(handleFirebaseError(error));
+      });
     } finally {
       setLoading(false);
     }
@@ -36,7 +38,9 @@ export default function LoginPage() {
       provider === "google" ? await signInWithGoogle() : await signInWithGithub();
       router.push("/dashboard"); // Redirect after login
     } catch (error: any) {
-      setError(error.message);
+      import("@/app/lib/errorHandler").then(({ handleFirebaseError }) => {
+        setError(handleFirebaseError(error));
+      });
     } finally {
       setLoading(false);
     }
