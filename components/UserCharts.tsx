@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState } from 'react';
@@ -17,6 +16,7 @@ import {
   PolarAreaController,
   ScatterController,
   BubbleController,
+  RadarController,
 } from 'chart.js';
 import { Bar, Doughnut, Line, Radar, PolarArea, Scatter, Bubble, Pie } from 'react-chartjs-2';
 
@@ -34,7 +34,8 @@ ChartJS.register(
   RadialLinearScale,
   PolarAreaController,
   ScatterController,
-  BubbleController
+  BubbleController,
+  RadarController
 );
 
 type UserData = {
@@ -110,16 +111,16 @@ export default function UserCharts({ userData }: UserChartsProps) {
   useEffect(() => {
     const fetchUserRepos = async () => {
       if (!userData?.login) return;
-      
+
       setLoading(true);
       setError('');
-      
+
       try {
         const res = await fetch(`https://api.github.com/users/${userData.login}/repos?sort=updated&per_page=${dateRange}`);
         if (!res.ok) {
           throw new Error("Failed to fetch repositories");
         }
-        
+
         const data = await res.json();
         setRepos(data);
       } catch (err: any) {
@@ -128,7 +129,7 @@ export default function UserCharts({ userData }: UserChartsProps) {
         setLoading(false);
       }
     };
-    
+
     fetchUserRepos();
   }, [userData, dateRange]);
 
@@ -362,9 +363,32 @@ export default function UserCharts({ userData }: UserChartsProps) {
         grid: {
           color: chartTheme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
         },
+        pointLabels: {
+          display: true,
+          centerPointLabels: true,
+          font: {
+            size: 12
+          }
+        }
       },
     },
   };
+
+  const radarOptions = {
+    ...baseOptions,
+    scales: {
+      r: {
+        pointLabels: {
+          display: true,
+          centerPointLabels: true,
+          font: {
+            size: 12
+          }
+        }
+      }
+    }
+  };
+
 
   return (
     <div className="w-full">
@@ -382,7 +406,7 @@ export default function UserCharts({ userData }: UserChartsProps) {
             <option value="light">Light Theme</option>
             <option value="neon">Neon Theme</option>
           </select>
-          
+
           <select 
             className="px-3 py-1 rounded bg-gray-700 hover:bg-gray-600"
             value={dateRange}
@@ -393,7 +417,7 @@ export default function UserCharts({ userData }: UserChartsProps) {
             <option value="15">15 Repos</option>
             <option value="20">20 Repos</option>
           </select>
-          
+
           <button
             onClick={() => setAnimationsEnabled(!animationsEnabled)}
             className="px-3 py-1 rounded bg-gray-700 hover:bg-gray-600"
@@ -514,7 +538,7 @@ export default function UserCharts({ userData }: UserChartsProps) {
             </h3>
             <Radar 
               data={activityRadarData} 
-              options={baseOptions} 
+              options={radarOptions} 
             />
           </div>
         )}
