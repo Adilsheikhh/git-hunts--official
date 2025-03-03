@@ -67,46 +67,21 @@ export default function UserCharts({ userData }: UserChartsProps) {
   const [selectedChart, setSelectedChart] = useState<string>('activity');
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
-  const [chartTheme, setChartTheme] = useState<string>('dark');
   const [animationsEnabled, setAnimationsEnabled] = useState<boolean>(true);
   const [dateRange, setDateRange] = useState<number>(5); // Number of repos to display
 
-  // Color themes
-  const themes = {
-    dark: {
-      primary: ['rgba(54, 162, 235, 0.7)', 'rgba(54, 162, 235, 1)'],
-      secondary: ['rgba(255, 99, 132, 0.7)', 'rgba(255, 99, 132, 1)'],
-      tertiary: ['rgba(75, 192, 192, 0.7)', 'rgba(75, 192, 192, 1)'],
-      quaternary: ['rgba(255, 206, 86, 0.7)', 'rgba(255, 206, 86, 1)'],
-      quinary: ['rgba(153, 102, 255, 0.7)', 'rgba(153, 102, 255, 1)'],
-      senary: ['rgba(255, 159, 64, 0.7)', 'rgba(255, 159, 64, 1)'],
-      septenary: ['rgba(199, 199, 199, 0.7)', 'rgba(199, 199, 199, 1)'],
-      octonary: ['rgba(83, 223, 83, 0.7)', 'rgba(83, 223, 83, 1)'],
-    },
-    light: {
-      primary: ['rgba(54, 162, 235, 0.5)', 'rgba(54, 162, 235, 0.8)'],
-      secondary: ['rgba(255, 99, 132, 0.5)', 'rgba(255, 99, 132, 0.8)'],
-      tertiary: ['rgba(75, 192, 192, 0.5)', 'rgba(75, 192, 192, 0.8)'],
-      quaternary: ['rgba(255, 206, 86, 0.5)', 'rgba(255, 206, 86, 0.8)'],
-      quinary: ['rgba(153, 102, 255, 0.5)', 'rgba(153, 102, 255, 0.8)'],
-      senary: ['rgba(255, 159, 64, 0.5)', 'rgba(255, 159, 64, 0.8)'],
-      septenary: ['rgba(119, 119, 119, 0.5)', 'rgba(119, 119, 119, 0.8)'],
-      octonary: ['rgba(83, 223, 83, 0.5)', 'rgba(83, 223, 83, 0.8)'],
-    },
-    neon: {
-      primary: ['rgba(0, 255, 255, 0.7)', 'rgba(0, 255, 255, 1)'],
-      secondary: ['rgba(255, 0, 255, 0.7)', 'rgba(255, 0, 255, 1)'],
-      tertiary: ['rgba(0, 255, 0, 0.7)', 'rgba(0, 255, 0, 1)'],
-      quaternary: ['rgba(255, 255, 0, 0.7)', 'rgba(255, 255, 0, 1)'],
-      quinary: ['rgba(0, 128, 255, 0.7)', 'rgba(0, 128, 255, 1)'],
-      senary: ['rgba(255, 128, 0, 0.7)', 'rgba(255, 128, 0, 1)'],
-      septenary: ['rgba(255, 255, 255, 0.7)', 'rgba(255, 255, 255, 1)'],
-      octonary: ['rgba(0, 255, 128, 0.7)', 'rgba(0, 255, 128, 1)'],
-    }
+  // Color themes - simplified to one theme for now.
+  const colors = {
+    primary: ['rgba(54, 162, 235, 0.7)', 'rgba(54, 162, 235, 1)'],
+    secondary: ['rgba(255, 99, 132, 0.7)', 'rgba(255, 99, 132, 1)'],
+    tertiary: ['rgba(75, 192, 192, 0.7)', 'rgba(75, 192, 192, 1)'],
+    quaternary: ['rgba(255, 206, 86, 0.7)', 'rgba(255, 206, 86, 1)'],
+    quinary: ['rgba(153, 102, 255, 0.7)', 'rgba(153, 102, 255, 1)'],
+    senary: ['rgba(255, 159, 64, 0.7)', 'rgba(255, 159, 64, 1)'],
+    septenary: ['rgba(199, 199, 199, 0.7)', 'rgba(199, 199, 199, 1)'],
+    octonary: ['rgba(83, 223, 83, 0.7)', 'rgba(83, 223, 83, 1)'],
   };
 
-  // Selected theme colors
-  const colors = themes[chartTheme as keyof typeof themes];
 
   useEffect(() => {
     const fetchUserRepos = async () => {
@@ -327,13 +302,13 @@ export default function UserCharts({ userData }: UserChartsProps) {
     plugins: {
       legend: {
         labels: {
-          color: chartTheme === 'dark' ? 'white' : 'black',
+          color: 'white', // Consistent color for legend
         },
       },
       tooltip: {
-        backgroundColor: chartTheme === 'dark' ? 'rgba(0, 0, 0, 0.8)' : 'rgba(255, 255, 255, 0.8)',
-        titleColor: chartTheme === 'dark' ? 'white' : 'black',
-        bodyColor: chartTheme === 'dark' ? 'white' : 'black',
+        backgroundColor: 'rgba(0, 0, 0, 0.8)', // Consistent tooltip background
+        titleColor: 'white', // Consistent tooltip title color
+        bodyColor: 'white', // Consistent tooltip body color
         borderColor: colors.primary[1],
         borderWidth: 1,
       },
@@ -341,27 +316,27 @@ export default function UserCharts({ userData }: UserChartsProps) {
     scales: {
       x: {
         ticks: {
-          color: chartTheme === 'dark' ? 'white' : 'black',
+          color: 'white', // Consistent color for x-axis ticks
         },
         grid: {
-          color: chartTheme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
+          color: 'rgba(255, 255, 255, 0.1)', // Consistent grid color
         },
       },
       y: {
         beginAtZero: true,
         ticks: {
-          color: chartTheme === 'dark' ? 'white' : 'black',
+          color: 'white', // Consistent color for y-axis ticks
         },
         grid: {
-          color: chartTheme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
+          color: 'rgba(255, 255, 255, 0.1)', // Consistent grid color
         },
       },
       r: {
         ticks: {
-          color: chartTheme === 'dark' ? 'white' : 'black',
+          color: 'white', // Consistent color for radial ticks
         },
         grid: {
-          color: chartTheme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
+          color: 'rgba(255, 255, 255, 0.1)', // Consistent grid color
         },
         pointLabels: {
           display: true,
@@ -395,18 +370,9 @@ export default function UserCharts({ userData }: UserChartsProps) {
       {loading && <p className="text-center my-2">Loading chart data...</p>}
       {error && <p className="text-center text-red-500 my-2">{error}</p>}
 
+
       <div className="flex flex-wrap gap-2 justify-between mb-4">
         <div className="flex flex-wrap gap-2">
-          <select 
-            className="px-3 py-1 rounded bg-gray-700 hover:bg-gray-600"
-            value={chartTheme}
-            onChange={(e) => setChartTheme(e.target.value)}
-          >
-            <option value="dark">Dark Theme</option>
-            <option value="light">Light Theme</option>
-            <option value="neon">Neon Theme</option>
-          </select>
-
           <select 
             className="px-3 py-1 rounded bg-gray-700 hover:bg-gray-600"
             value={dateRange}
@@ -494,10 +460,10 @@ export default function UserCharts({ userData }: UserChartsProps) {
         </button>
       </div>
 
-      <div className={`p-4 rounded-lg ${chartTheme === 'dark' ? 'bg-gray-800' : chartTheme === 'light' ? 'bg-gray-200' : 'bg-gray-900'}`}>
+      <div className="p-4 rounded-lg bg-gray-800">
         {selectedChart === 'activity' && (
           <div className="h-80">
-            <h3 className={`text-center text-xl mb-2 ${chartTheme === 'light' ? 'text-black' : 'text-white'}`}>
+            <h3 className="text-center text-xl mb-2 text-white font-semibold">
               Activity Overview - {calculateAccountAge()} Years on GitHub
             </h3>
             <Doughnut 
@@ -509,7 +475,7 @@ export default function UserCharts({ userData }: UserChartsProps) {
 
         {selectedChart === 'topRepos' && (
           <div className="h-80">
-            <h3 className={`text-center text-xl mb-2 ${chartTheme === 'light' ? 'text-black' : 'text-white'}`}>
+            <h3 className="text-center text-xl mb-2 text-white font-semibold">
               Top Repositories - Stars & Forks
             </h3>
             <Bar 
@@ -521,7 +487,7 @@ export default function UserCharts({ userData }: UserChartsProps) {
 
         {selectedChart === 'repoSize' && (
           <div className="h-80">
-            <h3 className={`text-center text-xl mb-2 ${chartTheme === 'light' ? 'text-black' : 'text-white'}`}>
+            <h3 className="text-center text-xl mb-2 text-white font-semibold">
               Repository Sizes (KB)
             </h3>
             <Line 
@@ -533,7 +499,7 @@ export default function UserCharts({ userData }: UserChartsProps) {
 
         {selectedChart === 'radar' && (
           <div className="h-80">
-            <h3 className={`text-center text-xl mb-2 ${chartTheme === 'light' ? 'text-black' : 'text-white'}`}>
+            <h3 className="text-center text-xl mb-2 text-white font-semibold">
               Activity Radar
             </h3>
             <Radar 
@@ -545,7 +511,7 @@ export default function UserCharts({ userData }: UserChartsProps) {
 
         {selectedChart === 'languages' && (
           <div className="h-80">
-            <h3 className={`text-center text-xl mb-2 ${chartTheme === 'light' ? 'text-black' : 'text-white'}`}>
+            <h3 className="text-center text-xl mb-2 text-white font-semibold">
               Language Distribution
             </h3>
             <PolarArea 
@@ -557,7 +523,7 @@ export default function UserCharts({ userData }: UserChartsProps) {
 
         {selectedChart === 'issues' && (
           <div className="h-80">
-            <h3 className={`text-center text-xl mb-2 ${chartTheme === 'light' ? 'text-black' : 'text-white'}`}>
+            <h3 className="text-center text-xl mb-2 text-white font-semibold">
               Open Issues by Repository
             </h3>
             <Bar 
@@ -569,7 +535,7 @@ export default function UserCharts({ userData }: UserChartsProps) {
 
         {selectedChart === 'bubble' && (
           <div className="h-80">
-            <h3 className={`text-center text-xl mb-2 ${chartTheme === 'light' ? 'text-black' : 'text-white'}`}>
+            <h3 className="text-center text-xl mb-2 text-white font-semibold">
               Repository Popularity (Forks vs Stars)
             </h3>
             <Bubble 
@@ -583,7 +549,7 @@ export default function UserCharts({ userData }: UserChartsProps) {
                     title: {
                       display: true,
                       text: 'Forks',
-                      color: chartTheme === 'dark' ? 'white' : 'black',
+                      color: 'white',
                     },
                   },
                   y: {
@@ -591,7 +557,7 @@ export default function UserCharts({ userData }: UserChartsProps) {
                     title: {
                       display: true,
                       text: 'Stars',
-                      color: chartTheme === 'dark' ? 'white' : 'black',
+                      color: 'white',
                     },
                   },
                 },
@@ -619,7 +585,7 @@ export default function UserCharts({ userData }: UserChartsProps) {
 
         {selectedChart === 'engagement' && (
           <div className="h-80">
-            <h3 className={`text-center text-xl mb-2 ${chartTheme === 'light' ? 'text-black' : 'text-white'}`}>
+            <h3 className="text-center text-xl mb-2 text-white font-semibold">
               Engagement Ratios
             </h3>
             <Pie 
