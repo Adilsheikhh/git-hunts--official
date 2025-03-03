@@ -1,10 +1,13 @@
+
 "use client";
 
 import Link from "next/link";
-import { useSession, signOut } from "next-auth/react";
+import { useAuth } from "@/app/context/AuthProvider";
+import { signOut } from "firebase/auth";
+import { auth } from "@/app/lib/firebase";
 
 const Navbar = () => {
-  const { data: session } = useSession(); // Get authentication session
+  const { user } = useAuth();
 
   return (
     <nav className="bg-gray-900 text-white p-4 flex justify-between items-center">
@@ -13,11 +16,11 @@ const Navbar = () => {
       </h1>
       
       {/* If user is logged in, show profile & logout button */}
-      {session ? (
+      {user ? (
         <div className="flex items-center gap-4">
-          <span>{session.user?.name}</span>
+          <span>{user.displayName || user.email}</span>
           <button
-            onClick={() => signOut()}
+            onClick={() => signOut(auth)}
             className="bg-red-500 px-4 py-2 rounded-md hover:bg-red-600"
           >
             Logout
